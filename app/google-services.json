@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "529368433898",
+    "firebase_url": "https://skypeclone-4b1a4.firebaseio.com",
+    "project_id": "skypeclone-4b1a4",
+    "storage_bucket": "skypeclone-4b1a4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:529368433898:android:78e0ebe27aad5f3d424393",
+        "android_client_info": {
+          "package_name": "com.scan.imagetotext"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "529368433898-gv7d2cko7g6fhu55e8bs2ke11indqj53.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.scan.imagetotext",
+            "certificate_hash": "b852f338e814b5f83e39a7ba1fe54b07f20a8e18"
+          }
+        },
+        {
+          "client_id": "529368433898-d3ru6edmc3bapqf05d2vdf8dkq05ojek.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB55L0D_ZXI1wnXuK8CJqib2GFfyQC8tlw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "529368433898-d3ru6edmc3bapqf05d2vdf8dkq05ojek.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

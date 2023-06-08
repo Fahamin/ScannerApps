@@ -3,27 +3,28 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
+        android:name=".Utils.MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:hardwareAccelerated="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ScannerApps"
         tools:targetApi="31">
+
         <activity
-            android:name=".ResultActivity"
+            android:name=".ScanPdfActivity"
             android:exported="false" />
         <activity
             android:name=".ImageToPDfMultiple"
             android:exported="false" />
         <activity
-            android:name=".ScanPdfActivity"
-            android:exported="false" />
-        <activity
-            android:name=".QrCodeActivity"
-            android:exported="false" />
+            android:name=".ResultActivity"
+            android:exported="false"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -33,7 +34,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".QrCodeActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ScanImageActivity"
+            android:exported="true" />
 
+        <meta-data
+            android:name="com.google.firebase.ml.vision.DEPENDENCIES"
+            android:value="ocr" />
+        <meta-data
+            android:name="com.google.mlkit.vision.DEPENDENCIES"
+            android:value="barcode" />
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

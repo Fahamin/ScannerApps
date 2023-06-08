@@ -1,6 +1,7 @@
 package com.scan.imagetotext;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -24,6 +25,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -72,7 +74,7 @@ public class ScanImageActivity extends AppCompatActivity {
 
     ImageView captureImage;
 
-    LinearLayout cameraLayout;
+    RelativeLayout cameraLayout;
 
     String imageurl;
     Uri uri;
@@ -87,18 +89,19 @@ public class ScanImageActivity extends AppCompatActivity {
     private final String[] REQUIRED_PERMISSIONS = new String[]{"android.permission.CAMERA", "android.permission.READ_EXTERNAL_STORAGE", "android.permission.WRITE_EXTERNAL_STORAGE"};
     View bar;
 
+    @SuppressLint({"WrongViewCast", "MissingInflatedId"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_scan_image);
 
         FirebaseApp.initializeApp(this);
         setTitle("Image To Text");
-        ImageView imageView = findViewById(R.id.imageID);
+        imageView = findViewById(R.id.imageID);
         bar = findViewById(R.id.bar);
         cameraLayout = findViewById(R.id.camera_LayoutID);
         captureImage = findViewById(R.id.captureImg);
-        PreviewView mPreviewView = findViewById(R.id.camera);
+        mPreviewView = findViewById(R.id.camera);
         chooseImage(this);
 
     }
