@@ -1,5 +1,6 @@
 package com.scan.imagetotext
 
+import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Intent
@@ -15,6 +16,8 @@ import com.gkemon.XMLtoPDF.PdfGenerator
 import com.gkemon.XMLtoPDF.PdfGeneratorListener
 import com.gkemon.XMLtoPDF.model.FailureResponse
 import com.gkemon.XMLtoPDF.model.SuccessResponse
+import com.scan.imagetotext.Model.ScanResultModel
+import com.scan.imagetotext.ResultDatabaseHelper.ScanResultDatabaseHelper
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -26,11 +29,14 @@ import java.util.Locale
 class ResultActivity : AppCompatActivity() {
     lateinit var result: String
     lateinit var resultTv: EditText
+    lateinit var db: ScanResultDatabaseHelper
 
+    @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_result)
         resultTv = findViewById(R.id.tvResult)
+        db = ScanResultDatabaseHelper(this)
 
         result = intent.getStringExtra("result")!!
         resultTv.setText(result)
@@ -47,10 +53,17 @@ class ResultActivity : AppCompatActivity() {
 
         })
         findViewById<View>(R.id.saveID).setOnClickListener(View.OnClickListener {
-            val data = resultTv.text.toString()
-            getneratePdf()
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+            val date = Date()
+            val timeStamp = dateFormat.format(date).toString()
 
+            val data = resultTv.text.toString()
+            val model = ScanResultModel(0, data, timeStamp)
+            db.insertToScanResult(model)
+
+            startActivity(Intent(this, FileSaveActivity::class.java));
         })
+
         findViewById<View>(R.id.shareID).setOnClickListener(View.OnClickListener {
             val intent = Intent(Intent.ACTION_SEND)
             val shareBody = resultTv.text.toString()

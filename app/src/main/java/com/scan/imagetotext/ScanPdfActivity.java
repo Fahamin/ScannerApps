@@ -1,17 +1,31 @@
 package com.scan.imagetotext;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.Constraints;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.content.ContextCompat;
 
 import com.itextpdf.text.pdf.PdfReader;
@@ -20,6 +34,7 @@ import com.scan.imagetotext.Utils.FileDialog;
 
 import java.io.File;
 import java.io.PrintStream;
+import java.net.URI;
 import java.util.ArrayList;
 
 
@@ -37,10 +52,56 @@ public class ScanPdfActivity extends AppCompatActivity {
         setTitle("Pdf To Text");
 
         nametv = findViewById(R.id.nameTv);
+
         getFileFromStorage();
+
+
+       /* Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.setType("application/pdf");
+        startActivityForResult(intent, 1212);*/
+
+
     }
 
+    ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.
+            StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @SuppressLint("Range")
+        @Override
+        public void onActivityResult(ActivityResult result) {
+
+            if (result.getResultCode() == Activity.RESULT_OK) {
+                // There are no request codes
+                Intent data = result.getData();
+                // Get the d of the selected file
+                Uri uri = data.getData();
+
+                String uriString = uri.toString();
+                File myFile = new File(uriString);
+                String[] pathArr = myFile.getAbsolutePath().split(":/");
+                filePath = pathArr[pathArr.length - 1];
+                String displayName = null;
+                if (uriString.startsWith("content://")) {
+                    Cursor cursor = null;
+                    try {
+                        cursor = getContentResolver().query(uri, null, null, null, null);
+                        if (cursor != null && cursor.moveToFirst()) {
+                            displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                            nametv.setText(displayName);
+                        }
+                    } finally {
+                        cursor.close();
+                    }
+                } else if (uriString.startsWith("file://")) {
+                    displayName = myFile.getName();
+                }
+            }
+
+        }
+    });
+
     final ArrayList<File> allFile = readfile(Environment.getExternalStorageDirectory());
+
     public ArrayList<File> readfile(File file) {
         ArrayList<File> list = new ArrayList<>();
 
@@ -57,6 +118,7 @@ public class ScanPdfActivity extends AppCompatActivity {
                 }
             }
         }
+
         return list;
     }
 

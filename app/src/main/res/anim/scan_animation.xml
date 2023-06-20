@@ -3,10 +3,11 @@
     android:fillAfter="false">
 
     <translate
-        android:fromYDelta="15%p"
-        android:toYDelta="85%p"
+        android:fromYDelta="5%p"
+        android:toYDelta="55%p"
         android:duration="2000"
         android:repeatCount="infinite"
         android:repeatMode="reverse"
         />
+
 </set>
