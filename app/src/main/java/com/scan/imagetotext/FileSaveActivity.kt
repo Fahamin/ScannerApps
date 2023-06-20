@@ -28,7 +28,7 @@ class FileSaveActivity : AppCompatActivity(),
         data = db.allScanResult as MutableList<ScanResultModel>
         adapter = CustomAdapter(this, data, this)
         recyclerview.adapter = adapter
-        adapter.notifyDataSetChanged()
+
     }
 
     override fun clickListener(pos: Int) {
@@ -39,4 +39,5 @@ class FileSaveActivity : AppCompatActivity(),
         adapter.notifyDataSetChanged()
 
     }
+
 }
