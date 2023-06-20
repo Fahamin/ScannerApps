@@ -55,7 +55,6 @@ public class ScanPdfActivity extends AppCompatActivity {
 
         getFileFromStorage();
 
-
        /* Intent intent = new Intent();
         intent.setAction(Intent.ACTION_GET_CONTENT);
         intent.setType("application/pdf");

@@ -17,7 +17,7 @@ import com.gkemon.XMLtoPDF.PdfGeneratorListener
 import com.gkemon.XMLtoPDF.model.FailureResponse
 import com.gkemon.XMLtoPDF.model.SuccessResponse
 import com.scan.imagetotext.Model.ScanResultModel
-import com.scan.imagetotext.ResultDatabaseHelper.ScanResultDatabaseHelper
+import com.scan.imagetotext.DatabaseHelper.ScanResultDatabaseHelper
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream

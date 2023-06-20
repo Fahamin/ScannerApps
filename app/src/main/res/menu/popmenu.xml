@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="us.dev.configaddons.activity.More_Activity">
+
+
+    <item
+        android:id="@+id/pop_deletID"
+        android:title="Delete List"/>
+
+    <item
+        android:id="@+id/pop_openID"
+        android:title="Open List"/>
+</menu>

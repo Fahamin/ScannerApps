@@ -219,9 +219,8 @@ class ScanImageActivity : AppCompatActivity() {
 
                             imageView.visibility = View.VISIBLE
                             btnScan.visibility = View.VISIBLE
-
-                            // findTextFromImage(myBitmap)
                             imageurl = picturePath
+
                             cursor.close()
                         }
                     }

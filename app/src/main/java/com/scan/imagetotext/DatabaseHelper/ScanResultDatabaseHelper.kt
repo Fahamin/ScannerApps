@@ -1,4 +1,4 @@
-package com.scan.imagetotext.ResultDatabaseHelper
+package com.scan.imagetotext.DatabaseHelper
 
 import android.content.ContentValues
 import android.content.Context
