@@ -2,13 +2,12 @@ package com.scan.imagetotext;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
+import android.provider.DocumentsContract;
 import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.View;
@@ -18,32 +17,23 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.Constraints;
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.ActivityOptionsCompat;
-import androidx.core.content.ContextCompat;
 
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
-import com.scan.imagetotext.Utils.FileDialog;
 
 import java.io.File;
-import java.io.PrintStream;
-import java.net.URI;
-import java.util.ArrayList;
-
+import java.io.IOException;
 
 public class ScanPdfActivity extends AppCompatActivity {
 
     String filePath = "";
     String strFileName;
+    public String[] itemALL;
 
     TextView nametv;
+    Uri uri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,17 +43,14 @@ public class ScanPdfActivity extends AppCompatActivity {
 
         nametv = findViewById(R.id.nameTv);
 
-        getFileFromStorage();
-
-       /* Intent intent = new Intent();
+        Intent intent = new Intent();
         intent.setAction(Intent.ACTION_GET_CONTENT);
         intent.setType("application/pdf");
-        startActivityForResult(intent, 1212);*/
-
+        pdfLauncher.launch(intent);
 
     }
 
-    ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.
+    ActivityResultLauncher<Intent> pdfLauncher = registerForActivityResult(new ActivityResultContracts.
             StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @SuppressLint("Range")
         @Override
@@ -73,12 +60,11 @@ public class ScanPdfActivity extends AppCompatActivity {
                 // There are no request codes
                 Intent data = result.getData();
                 // Get the d of the selected file
-                Uri uri = data.getData();
-
+                uri = data.getData();
                 String uriString = uri.toString();
                 File myFile = new File(uriString);
                 String[] pathArr = myFile.getAbsolutePath().split(":/");
-                filePath = pathArr[pathArr.length - 1];
+
                 String displayName = null;
                 if (uriString.startsWith("content://")) {
                     Cursor cursor = null;
@@ -99,28 +85,25 @@ public class ScanPdfActivity extends AppCompatActivity {
         }
     });
 
-    final ArrayList<File> allFile = readfile(Environment.getExternalStorageDirectory());
+    public static String getPath(Context context, Uri uri) {
+        // Check if the URI is a document
+        if (DocumentsContract.isDocumentUri(context, uri)) {
+            // Get the document ID
+            String docId = DocumentsContract.getDocumentId(uri);
 
-    public ArrayList<File> readfile(File file) {
-        ArrayList<File> list = new ArrayList<>();
+            // Split the document ID
+            String split = docId.split(":")[1];
 
-        File[] allfiles = file.listFiles();
+            // Get the real path
+            String path = DocumentsContract.buildDocumentUri(uri.getAuthority(), split).getPath();
+            Log.e("pdffound", path);
 
-        if (allfiles != null) {
-            for (File singleFile : allfiles) {
-                if (singleFile.isDirectory() && !singleFile.isHidden()) {
-                    list.addAll(readfile(singleFile));
-                } else {
-                    if (singleFile.getName().endsWith(".pdf")) {
-                        list.add(singleFile);
-                    }
-                }
-            }
+            return path;
+        } else {
+            // The URI is not a document
+            return uri.getPath();
         }
-
-        return list;
     }
-
 
     private void extractPDF() {
         try {
@@ -129,7 +112,7 @@ public class ScanPdfActivity extends AppCompatActivity {
             String extractedText = "";
             // creating a variable for pdf reader
             // and passing our PDF file in it.
-            PdfReader reader = new PdfReader(filePath);
+            PdfReader reader = new PdfReader(getPath(this,uri));
 
             // below line is for getting number
             // of pages of PDF file.
@@ -154,57 +137,10 @@ public class ScanPdfActivity extends AppCompatActivity {
         }
     }
 
+    public void ScanNow(View view)  {
+        extractPDF();
+        //Log.e("pdffound", text);
 
-    public boolean getFileFromStorage() {
-        if (Build.VERSION.SDK_INT < 23) {
-            Log.v(Constraints.TAG, "Permission is granted");
-            FileDialog fileDialog = new FileDialog(this, Environment.getExternalStorageDirectory());
-            fileDialog.setFileEndsWith(".pdf");
-            fileDialog.addFileListener(new FileDialog.FileSelectedListener() {
-                public void fileSelected(File file) {
-                    filePath = file.getAbsolutePath();
-                    File filetwo = new File(filePath);
-                    strFileName = filetwo.getName();
-                    nametv.setText(strFileName);
-                    Log.e("name", strFileName);
-                    PrintStream printStream = System.out;
-                }
-            });
-            fileDialog.showDialog();
-            return true;
-        } else if (ContextCompat.checkSelfPermission(this, "android.permission.WRITE_EXTERNAL_STORAGE") == 0) {
-            FileDialog fileDialog2 = new FileDialog(this, Environment.getExternalStorageDirectory());
-            fileDialog2.setFileEndsWith(".pdf");
-            fileDialog2.addFileListener(new FileDialog.FileSelectedListener() {
-                public void fileSelected(File file) {
-                    filePath = file.getAbsolutePath();
-                    System.out.println(file.getAbsolutePath());
-                    File filetwo = new File(filePath);
-                    strFileName = filetwo.getName();
-                    nametv.setText(strFileName);
-
-                    Log.e("name", strFileName);
-                    PrintStream printStream = System.out;
-                    printStream.println("selected file :" + file.toString());
-                }
-            });
-            fileDialog2.showDialog();
-            Log.v(Constraints.TAG, "Permission is granted");
-            return true;
-        } else {
-            Log.v(Constraints.TAG, "Permission is revoked");
-            ActivityCompat.requestPermissions(this, new String[]{"android.permission.WRITE_EXTERNAL_STORAGE"}, 1);
-            return false;
-        }
-    }
-
-    public void ScanNow(View view) {
-
-        if (filePath.isEmpty()) {
-            Toast.makeText(this, "Pdf File Not Selected", Toast.LENGTH_SHORT).show();
-        } else {
-            extractPDF();
-        }
     }
 
 

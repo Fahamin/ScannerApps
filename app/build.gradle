@@ -63,9 +63,7 @@ dependencies {
     implementation "androidx.camera:camera-extensions:1.2.0-beta01"
     implementation "androidx.camera:camera-core:1.2.0-beta01"
 
-    //pdf to text
-    implementation "com.itextpdf:itextg:5.5.10"
-
+    implementation 'com.itextpdf:itextpdf:5.5.10'
     //qrcode scann
     implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
 
