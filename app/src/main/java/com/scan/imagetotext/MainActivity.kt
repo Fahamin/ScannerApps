@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, ScanPdfActivity::class.java))
 
         })
+
         findViewById<LinearLayout>(R.id.scanimgetopdf).setOnClickListener(View.OnClickListener {
             startActivity(Intent(this, ImageToPDfMultiple::class.java))
 

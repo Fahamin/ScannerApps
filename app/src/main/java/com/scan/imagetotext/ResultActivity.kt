@@ -12,10 +12,7 @@ import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.gkemon.XMLtoPDF.PdfGenerator
-import com.gkemon.XMLtoPDF.PdfGeneratorListener
-import com.gkemon.XMLtoPDF.model.FailureResponse
-import com.gkemon.XMLtoPDF.model.SuccessResponse
+
 import com.scan.imagetotext.Model.ScanResultModel
 import com.scan.imagetotext.DatabaseHelper.ScanResultDatabaseHelper
 import java.io.File
@@ -97,7 +94,7 @@ class ResultActivity : AppCompatActivity() {
         return dir
     }
 
-    private fun getneratePdf() {
+   /* private fun getneratePdf() {
         PdfGenerator.getBuilder().setContext(this).fromViewSource().fromView(resultTv)
             .setFileName("Test-PDF").setFolderName("Test-PDF-folder").openPDFafterGeneration(true)
             .build(object : PdfGeneratorListener() {
@@ -109,10 +106,10 @@ class ResultActivity : AppCompatActivity() {
                     super.showLog(log)
                 }
 
-                override fun onStartPDFGeneration() {/*When PDF generation begins to start*/
+                override fun onStartPDFGeneration() {*//*When PDF generation begins to start*//*
                 }
 
-                override fun onFinishPDFGeneration() {/*When PDF generation is finished*/
+                override fun onFinishPDFGeneration() {*//*When PDF generation is finished*//*
                 }
 
                 override fun onSuccess(response: SuccessResponse) {
@@ -121,7 +118,7 @@ class ResultActivity : AppCompatActivity() {
             })
     }
 
-
+*/
     private fun writeToFile(data: String) {
         val formatter = SimpleDateFormat("yyyy_MM_dd_HH_mm_ss", Locale.US)
         val now = Date()
