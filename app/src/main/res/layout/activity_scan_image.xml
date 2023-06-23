@@ -19,17 +19,17 @@
         android:padding="5dp"
         android:translationZ="90dp" />
 
-
-    <me.pqpo.smartcropperlib.view.CropImageView
+    <!-- Image Cropper fill the remaining available height -->
+    <com.canhub.cropper.CropImageView
         android:id="@+id/imageID"
         android:layout_width="match_parent"
         android:layout_height="400dp"
-        android:layout_margin="15dp"
         android:layout_gravity="center"
+        android:layout_margin="15dp"
         android:padding="5dp"
-        android:rotation="90"
         android:src="@mipmap/ic_launcher_round"
         android:visibility="gone" />
+
 
     <!-- <androidx.appcompat.widget.AppCompatImageView
          android:id="@+id/imageID"
@@ -71,9 +71,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Scan"
-        android:visibility="invisible"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="invisible" />
 
 </LinearLayout>

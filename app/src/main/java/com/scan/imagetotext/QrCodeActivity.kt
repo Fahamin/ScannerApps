@@ -24,7 +24,7 @@ class QrCodeActivity : AppCompatActivity() {
     ) { result: ScanIntentResult ->
         if (result.contents == null) {
             Toast.makeText(this@QrCodeActivity, "Cancelled", Toast.LENGTH_LONG).show()
-            startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(this, HomeActivity::class.java))
         } else {
             startActivity(
                 Intent(this, ResultActivity::class.java).putExtra(
@@ -37,6 +37,6 @@ class QrCodeActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        startActivity(Intent(this, MainActivity::class.java))
+        startActivity(Intent(this, HomeActivity::class.java))
     }
 }

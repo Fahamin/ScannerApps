@@ -43,12 +43,11 @@ import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
+import com.canhub.cropper.CropImageView
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.FirebaseApp
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
-import com.google.firebase.ml.vision.text.FirebaseVisionText
-import me.pqpo.smartcropperlib.view.CropImageView
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -83,8 +82,11 @@ class ScanImageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan_image)
+
         FirebaseApp.initializeApp(this)
         title = "Image To Text"
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         imageView = findViewById(R.id.imageID)
         bar = findViewById(R.id.bar)
         cameraLayout = findViewById(R.id.camera_LayoutID)
@@ -96,7 +98,7 @@ class ScanImageActivity : AppCompatActivity() {
         btnScan.setOnClickListener(View.OnClickListener {
 
             starAnimation()
-            findTextFromImage(cropBitmap)
+            findTextFromImage()
         })
     }
 
@@ -108,10 +110,8 @@ class ScanImageActivity : AppCompatActivity() {
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.setCanceledOnTouchOutside(false)
         val btnCancel = dialog.findViewById<Button>(R.id.btnCancle)
-        val cameraIv: LinearLayout
-        val galleryIv: LinearLayout
-        cameraIv = dialog.findViewById(R.id.ivCamera)
-        galleryIv = dialog.findViewById(R.id.ivGallary)
+        val cameraIv: LinearLayout = dialog.findViewById(R.id.ivCamera)
+        val galleryIv: LinearLayout = dialog.findViewById(R.id.ivGallary)
 
         cameraIv.setOnClickListener {
             if (methodRequiresTwoPermission() && allPermissionsGranted()) {
@@ -143,7 +143,7 @@ class ScanImageActivity : AppCompatActivity() {
             }
         }
         btnCancel.setOnClickListener {
-            startActivity(Intent(applicationContext, MainActivity::class.java))
+            startActivity(Intent(applicationContext, HomeActivity::class.java))
             dialog.dismiss()
         }
         dialog.show()
@@ -196,39 +196,38 @@ class ScanImageActivity : AppCompatActivity() {
         })
 
     // Luncher  imagepick from gallary
-    var imagePickerLuncher = registerForActivityResult<Intent, ActivityResult>(
-        ActivityResultContracts.StartActivityForResult(),
-        object : ActivityResultCallback<ActivityResult> {
-            override fun onActivityResult(result: ActivityResult) {
-                if (result.resultCode == RESULT_OK) {
-                    // There are no request codes
-                    val data = result.data
-                    val selectedImage = data!!.data
-                    val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
-                    if (selectedImage != null) {
-                        val cursor =
-                            contentResolver.query(selectedImage, filePathColumn, null, null, null)
-                        if (cursor != null) {
-                            cursor.moveToFirst()
-                            val columnIndex = cursor.getColumnIndex(filePathColumn[0])
-                            val picturePath = cursor.getString(columnIndex)
-                            myBitmap = BitmapFactory.decodeFile(picturePath)
-                            imageView.rotation = 0f
-                            imageView.setImageToCrop(myBitmap)
-                            cropBitmap = imageView.crop()
+    private var imagePickerLuncher = registerForActivityResult<Intent, ActivityResult>(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            // There are no request codes
+            val data = result.data
+            val selectedImage = data!!.data
+            val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
+            if (selectedImage != null) {
+                val cursor =
+                    contentResolver.query(selectedImage, filePathColumn, null, null, null)
+                if (cursor != null) {
+                    cursor.moveToFirst()
+                    val columnIndex = cursor.getColumnIndex(filePathColumn[0])
+                    val picturePath = cursor.getString(columnIndex)
+                    myBitmap = BitmapFactory.decodeFile(picturePath)
+                    imageView.rotation = 0f
+                    imageView.setImageBitmap(myBitmap)
 
-                            imageView.visibility = View.VISIBLE
-                            btnScan.visibility = View.VISIBLE
-                            imageurl = picturePath
+                    imageView.visibility = View.VISIBLE
+                    btnScan.visibility = View.VISIBLE
 
-                            cursor.close()
-                        }
-                    }
+
+                    // imageurl = picturePath
+
+                    cursor.close()
                 }
             }
-        })
+        }
+    }
 
-    fun starAnimation() {
+    private fun starAnimation() {
         val animation = AnimationUtils.loadAnimation(this@ScanImageActivity, R.anim.scan_animation)
         animation.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation) {}
@@ -259,7 +258,7 @@ class ScanImageActivity : AppCompatActivity() {
         }, ContextCompat.getMainExecutor(this))
     }
 
-    fun bindPreview(cameraProvider: ProcessCameraProvider) {
+    private fun bindPreview(cameraProvider: ProcessCameraProvider) {
         //  val preview = Preview.Builder().build()
         val preview = Preview.Builder().apply {
             setTargetAspectRatio(AspectRatio.RATIO_16_9)
@@ -299,55 +298,58 @@ class ScanImageActivity : AppCompatActivity() {
             )
         }
 
-        captureImage.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(v: View) {
-                mPreviewView.visibility = View.VISIBLE
-                val mDateFormat = SimpleDateFormat("yyyyMMddHHmmss", Locale.US)
-                val file: File = File(batchDirectoryName, mDateFormat.format(Date()) + ".jpg")
-                uri = Uri.fromFile(file)
-                Log.e("uri", uri.toString())
-                val outputFileOptions = OutputFileOptions.Builder(file).build()
-                imageCapture.takePicture(
-                    outputFileOptions,
-                    executor,
-                    object : ImageCapture.OnImageSavedCallback {
-                        override fun onImageSaved(outputFileResults: OutputFileResults) {
-                            val h = Handler(Looper.getMainLooper())
-                            h.post {
-                                Toast.makeText(
-                                    applicationContext,
-                                    "Image Saved successfully",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                //here show dialog
-                                myBitmap = BitmapFactory.decodeFile(file.absolutePath)
-                                cameraLayout.visibility = View.GONE
+        captureImage.setOnClickListener {
+            mPreviewView.visibility = View.VISIBLE
+            val mDateFormat = SimpleDateFormat("yyyyMMddHHmmss", Locale.US)
+            val file: File = File(batchDirectoryName, mDateFormat.format(Date()) + ".jpg")
+            uri = Uri.fromFile(file)
+            Log.e("uri", uri.toString())
+            val outputFileOptions = OutputFileOptions.Builder(file).build()
+            imageCapture.takePicture(
+                outputFileOptions,
+                executor,
+                object : ImageCapture.OnImageSavedCallback {
+                    override fun onImageSaved(outputFileResults: OutputFileResults) {
+                        val h = Handler(Looper.getMainLooper())
+                        h.post {
+                            Toast.makeText(
+                                applicationContext,
+                                "Image Saved successfully",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            //here show dialog
+                            myBitmap = BitmapFactory.decodeFile(file.absolutePath)
+                            cameraLayout.visibility = View.GONE
 
-                                imageView.setImageToCrop(myBitmap)
-                                imageView.visibility = View.VISIBLE
-                                btnScan.visibility = View.VISIBLE
+                            imageView.visibility = View.VISIBLE
+                            btnScan.visibility = View.VISIBLE
 
-                                cropBitmap = imageView.crop()
-                                imageurl = file.absolutePath
-                                //Log.e("imageurl", imageurl)
-                                MediaScannerConnection.scanFile(
-                                    applicationContext, arrayOf(file.absolutePath),
-                                    null
-                                ) { path, uri -> }
+                            imageView.setImageUriAsync(uri)
+
+                            // imageurl = file.absolutePath
+
+                            MediaScannerConnection.scanFile(
+                                applicationContext, arrayOf(file.absolutePath),
+                                null
+                            ) { path, uri ->
+
+
                             }
                         }
+                    }
 
-                        override fun onError(error: ImageCaptureException) {
-                            error.printStackTrace()
-                        }
-                    })
-            }
-        })
+                    override fun onError(error: ImageCaptureException) {
+                        error.printStackTrace()
+                    }
+                })
+        }
     }
 
-    private fun findTextFromImage(bitmap: Bitmap?) {
-        val image = FirebaseVisionImage.fromBitmap(bitmap!!)
+    private fun findTextFromImage() {
 
+        cropBitmap = imageView.getCroppedImage()!!
+
+        val image = FirebaseVisionImage.fromBitmap(cropBitmap)
         /*  FirebaseVisionCloudDocumentRecognizerOptions options =
                 new FirebaseVisionCloudDocumentRecognizerOptions.Builder()
                         .setLanguageHints(Arrays.asList("en", "bn", "hi"))
@@ -377,25 +379,21 @@ class ScanImageActivity : AppCompatActivity() {
         val detector = FirebaseVision.getInstance()
             .onDeviceTextRecognizer
         val result = detector.processImage(image)
-            .addOnSuccessListener(object : OnSuccessListener<FirebaseVisionText> {
-                override fun onSuccess(firebaseVisionText: FirebaseVisionText) {
-                    // Task completed successfully
-                    Log.e("findText", firebaseVisionText.text)
-                    startActivity(
-                        Intent(
-                            applicationContext,
-                            ResultActivity::class.java
-                        ).putExtra("result", firebaseVisionText.text)
+            .addOnSuccessListener { firebaseVisionText -> // Task completed successfully
+                startActivity(
+                    Intent(applicationContext, ResultActivity::class.java).putExtra(
+                        "result",
+                        firebaseVisionText.text
                     )
-                }
-            })
+                )
+            }
             .addOnFailureListener {
                 // Task failed with an exception
                 // ...
             }
     }
 
-    val batchDirectoryName: String
+    private val batchDirectoryName: String
         get() {
             var app_folder_path = ""
             app_folder_path = Environment.getExternalStoragePublicDirectory(

@@ -1,6 +1,7 @@
 package com.scan.imagetotext
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -15,13 +16,13 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.scan.imagetotext.Utils.ViewPagerAdapter
@@ -33,49 +34,48 @@ import java.util.Date
 import java.util.Locale
 
 class ImageToPDfMultiple : AppCompatActivity() {
-    lateinit var select: Button
-    lateinit var previous: Button
+    lateinit var btn_ImageSelect: Button
+    lateinit var btn_Converter: Button
+
     lateinit var next: Button
-    var PICK_IMAGE_MULTIPLE = 1
-    lateinit var imageEncoded: String
-    lateinit var total: TextView
     lateinit var mArrayUri: ArrayList<Uri?>
     var position = 0
-    lateinit var imagesEncodedList: List<String>
-
-    // creating object of ViewPager
     lateinit var mViewPager: ViewPager
-
-    // Creating Object of ViewPagerAdapter
     lateinit var mViewPagerAdapter: ViewPagerAdapter
     lateinit var bitmap: Bitmap
 
-    // creating a lateinit  variable for image view.
     var perms = arrayOf(
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
         Manifest.permission.READ_EXTERNAL_STORAGE
     )
 
+    @SuppressLint("MissingInflatedId", "RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_image_to_pdf_multiple)
-        title = "Image To PDF"
-        select = findViewById(R.id.select)
+        title = "Multiple Image To Pdf File"
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        btn_ImageSelect = findViewById(R.id.btn_ImageSelect)
+        btn_Converter = findViewById(R.id.btn_convert)
+
         mArrayUri = ArrayList()
 
         // Initializing the ViewPager Object
         mViewPager = findViewById<View>(R.id.viewPagerMain) as ViewPager
 
         // click here to select image
-        select.setOnClickListener(View.OnClickListener {
+        btn_ImageSelect.setOnClickListener(View.OnClickListener {
             if (methodRequiresTwoPermission()) {
                 val intent =
                     Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                // setting type to select to be image
                 intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
                 imagePickerLuncher.launch(Intent.createChooser(intent, "Select Picture"))
             }
         })
+
+
         mViewPager.setOnPageChangeListener(object : OnPageChangeListener {
             override fun onPageScrolled(
                 position: Int,
@@ -97,7 +97,11 @@ class ImageToPDfMultiple : AppCompatActivity() {
 
             override fun onPageScrollStateChanged(state: Int) {}
         })
-        findViewById<View>(R.id.btn_convert).setOnClickListener { createPdf() }
+
+        btn_Converter.setOnClickListener {
+            createPdf()
+        }
+
     }
 
     private fun methodRequiresTwoPermission(): Boolean {
@@ -119,12 +123,14 @@ class ImageToPDfMultiple : AppCompatActivity() {
             if (ContextCompat.checkSelfPermission(
                     this,
                     perms[0]
-                ) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(
-                    this,
-                    perms[1]
+                ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+                    this, perms[1]
                 ) == PackageManager.PERMISSION_GRANTED
             ) {
+                val intent =
+                    Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                imagePickerLuncher.launch(Intent.createChooser(intent, "Select Picture"))
             } else {
                 Toast.makeText(this, "Permissions not granted by the user.", Toast.LENGTH_SHORT)
                     .show()
@@ -137,6 +143,8 @@ class ImageToPDfMultiple : AppCompatActivity() {
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == RESULT_OK) {
+
+            btn_Converter.visibility = View.VISIBLE
             // There are no request codes
             val data = result.data
             if (data != null) {
@@ -192,7 +200,7 @@ class ImageToPDfMultiple : AppCompatActivity() {
         }
     }
 
-    fun createPdf() {
+    private fun createPdf() {
         if (methodRequiresTwoPermission()) {
             createPDF()
         }
@@ -263,8 +271,7 @@ class ImageToPDfMultiple : AppCompatActivity() {
 
     companion object {
         fun commonDocumentDirPath(): File? {
-            lateinit var dir: File
-            dir = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            var dir: File = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 File(
                     Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
                         .toString()

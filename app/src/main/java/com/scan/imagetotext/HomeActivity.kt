@@ -3,6 +3,8 @@ package com.scan.imagetotext
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import android.view.View
+import android.widget.LinearLayout
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -11,12 +13,12 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.FirebaseApp
 import com.scan.imagetotext.Utils.Fun.Companion.appurl
 import com.scan.imagetotext.databinding.ActivityHomeBinding
 
 class HomeActivity : AppCompatActivity() {
 
-    private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityHomeBinding
     private lateinit var drawer: DrawerLayout
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,6 +38,7 @@ class HomeActivity : AppCompatActivity() {
         )
         drawer.addDrawerListener(toggle)
         toggle.syncState()
+        FirebaseApp.initializeApp(this)
 
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
         navigationView.bringToFront()
@@ -78,10 +81,31 @@ class HomeActivity : AppCompatActivity() {
             false
         }
 
+        findViewById<LinearLayout>(R.id.scanImage).setOnClickListener {
+            startActivity(Intent(this, ScanImageActivity::class.java))
 
+        }
+
+        findViewById<LinearLayout>(R.id.scanQR).setOnClickListener {
+            startActivity(Intent(this, QrCodeActivity::class.java))
+
+        }
+
+        findViewById<LinearLayout>(R.id.scanBar).setOnClickListener {
+            startActivity(Intent(this, QrCodeActivity::class.java))
+
+        }
+
+        findViewById<LinearLayout>(R.id.scanPDF).setOnClickListener {
+            startActivity(Intent(this, ScanPdfActivity::class.java))
+        }
+
+        findViewById<LinearLayout>(R.id.scanimgetopdf).setOnClickListener(View.OnClickListener {
+            startActivity(Intent(this, ImageToPDfMultiple::class.java))
+
+        })
 
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -89,8 +113,4 @@ class HomeActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment_content_home)
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-    }
 }
