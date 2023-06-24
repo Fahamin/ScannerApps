@@ -8,6 +8,8 @@
     tools:context=".ResultActivity">
 
     <ScrollView
+        android:layout_above="@+id/card"
+        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -28,6 +30,7 @@
 
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

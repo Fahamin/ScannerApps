@@ -32,6 +32,7 @@ class ResultActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_result)
+
         resultTv = findViewById(R.id.tvResult)
         db = ScanResultDatabaseHelper(this)
 

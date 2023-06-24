@@ -21,8 +21,8 @@
 
         <LinearLayout
             android:id="@+id/scanImage"
-            android:layout_width="93dp"
-            android:layout_height="93dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_gravity="center"
             android:layout_marginStart="15dp"
             android:layout_marginEnd="10dp"
@@ -32,8 +32,8 @@
             android:padding="4dp">
 
             <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
                 android:layout_gravity="center"
                 android:src="@drawable/imscan" />
 
@@ -47,7 +47,7 @@
                 android:text="Image To Text"
                 android:textAlignment="center"
                 android:textColor="@color/black"
-                android:textSize="12sp"
+                android:textSize="17sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -63,8 +63,8 @@
             android:visibility="gone">
 
             <LinearLayout
-                android:layout_width="93dp"
-                android:layout_height="93dp"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
                 android:layout_gravity="center"
                 android:background="@drawable/btn_shapte"
                 android:gravity="center"
@@ -72,8 +72,8 @@
                 android:padding="4dp">
 
                 <ImageView
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
                     android:layout_gravity="center"
                     android:src="@drawable/pdfshow" />
 
@@ -87,7 +87,7 @@
                     android:text="Scan PDF"
                     android:textAlignment="center"
                     android:textColor="@color/black"
-                    android:textSize="12sp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -97,8 +97,8 @@
 
         <LinearLayout
             android:id="@+id/scanQR"
-            android:layout_width="93dp"
-            android:layout_height="93dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_gravity="center"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="15dp"
@@ -108,8 +108,8 @@
             android:padding="4dp">
 
             <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
                 android:layout_gravity="center"
                 android:src="@drawable/qrscan" />
 
@@ -123,7 +123,7 @@
                 android:text="Scan QRCode"
                 android:textAlignment="center"
                 android:textColor="@color/black"
-                android:textSize="12sp"
+                android:textSize="17sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -151,8 +151,8 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="93dp"
-                android:layout_height="93dp"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
                 android:layout_gravity="center"
                 android:background="@drawable/btn_shapte"
                 android:gravity="center"
@@ -160,8 +160,8 @@
                 android:padding="4dp">
 
                 <ImageView
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
                     android:layout_gravity="center"
                     android:src="@drawable/barscan" />
 
@@ -175,7 +175,7 @@
                     android:text="Scan BarCode"
                     android:textAlignment="center"
                     android:textColor="@color/black"
-                    android:textSize="12sp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -193,8 +193,8 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="93dp"
-                android:layout_height="93dp"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
                 android:layout_gravity="center"
                 android:background="@drawable/btn_shapte"
                 android:gravity="center"
@@ -202,8 +202,8 @@
                 android:padding="4dp">
 
                 <ImageView
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
                     android:layout_gravity="center"
                     android:src="@drawable/itp" />
 
@@ -217,7 +217,7 @@
                     android:text="Image To Pdf"
                     android:textAlignment="center"
                     android:textColor="@color/black"
-                    android:textSize="12sp"
+                    android:textSize="17sp"
                     android:textStyle="bold" />
             </LinearLayout>
 

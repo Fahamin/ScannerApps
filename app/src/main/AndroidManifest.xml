@@ -36,8 +36,9 @@
 
         <activity
             android:name=".FileSaveActivity"
-            android:theme="@style/Theme.Scan"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.Scan" />
+
         <activity
             android:name=".ScanPdfActivity"
             android:exported="false"

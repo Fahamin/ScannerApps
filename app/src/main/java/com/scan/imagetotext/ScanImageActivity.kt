@@ -84,7 +84,7 @@ class ScanImageActivity : AppCompatActivity() {
         setContentView(R.layout.activity_scan_image)
 
         FirebaseApp.initializeApp(this)
-        title = "Image To Text"
+        title = "Scanning Image"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         imageView = findViewById(R.id.imageID)
@@ -96,7 +96,7 @@ class ScanImageActivity : AppCompatActivity() {
         chooseImage(this)
 
         btnScan.setOnClickListener(View.OnClickListener {
-
+            bar.visibility = View.VISIBLE
             starAnimation()
             findTextFromImage()
         })
@@ -212,9 +212,7 @@ class ScanImageActivity : AppCompatActivity() {
                     val columnIndex = cursor.getColumnIndex(filePathColumn[0])
                     val picturePath = cursor.getString(columnIndex)
                     myBitmap = BitmapFactory.decodeFile(picturePath)
-                    imageView.rotation = 0f
                     imageView.setImageBitmap(myBitmap)
-
                     imageView.visibility = View.VISIBLE
                     btnScan.visibility = View.VISIBLE
 
@@ -242,8 +240,6 @@ class ScanImageActivity : AppCompatActivity() {
 
     //take image from camera
     private fun startCamera() {
-
-
         val cameraProviderFuture = ProcessCameraProvider.getInstance(this)
         cameraProviderFuture.addListener({
             try {
@@ -376,6 +372,8 @@ class ScanImageActivity : AppCompatActivity() {
                         // ...
                     }
                 });*/
+
+
         val detector = FirebaseVision.getInstance()
             .onDeviceTextRecognizer
         val result = detector.processImage(image)

@@ -49,6 +49,10 @@ class HomeActivity : AppCompatActivity() {
                 startActivity(Intent(this, ImageToPDfMultiple::class.java))
             }
 
+            if (item.itemId == R.id.nav_SaveFile) {
+                startActivity(Intent(this, FileSaveActivity::class.java))
+            }
+
             if (item.itemId == R.id.nav_ScanImage) {
                 startActivity(Intent(this, ScanImageActivity::class.java))
 

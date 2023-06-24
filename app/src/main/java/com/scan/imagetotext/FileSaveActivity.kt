@@ -16,9 +16,12 @@ class FileSaveActivity : AppCompatActivity(),
     lateinit var data: MutableList<ScanResultModel>
     lateinit var adapter: CustomAdapter
     lateinit var recyclerview: RecyclerView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_file_save_activitu)
+        title = "Document Save"
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         db = ScanResultDatabaseHelper(this)
         data = ArrayList<ScanResultModel>()

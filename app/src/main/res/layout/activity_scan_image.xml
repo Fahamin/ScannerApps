@@ -17,7 +17,8 @@
         android:layout_marginEnd="15dp"
         android:background="@android:color/black"
         android:padding="5dp"
-        android:translationZ="90dp" />
+        android:translationZ="90dp"
+        android:visibility="invisible" />
 
     <!-- Image Cropper fill the remaining available height -->
     <com.canhub.cropper.CropImageView
@@ -70,9 +71,16 @@
         android:id="@+id/btn_Scan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Scan"
+        android:layout_margin="5dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/btn_shapte"
+        android:drawableTop="@drawable/imscan"
+        android:padding="2dp"
+        android:text="Scan Now"
         android:textAlignment="center"
         android:textColor="@color/black"
+        android:textSize="18sp"
         android:textStyle="bold"
         android:visibility="invisible" />
 
