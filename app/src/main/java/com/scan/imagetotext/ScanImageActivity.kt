@@ -29,6 +29,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.AspectRatio
 import androidx.camera.core.CameraSelector
@@ -48,8 +49,13 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.FirebaseApp
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
+import com.google.firebase.ml.vision.document.FirebaseVisionCloudDocumentRecognizerOptions
+import com.google.firebase.ml.vision.document.FirebaseVisionDocumentText
+import com.google.firebase.ml.vision.document.FirebaseVisionDocumentTextRecognizer
+import com.google.firebase.ml.vision.text.FirebaseVisionCloudTextRecognizerOptions
 import java.io.File
 import java.text.SimpleDateFormat
+import java.util.Arrays
 import java.util.Date
 import java.util.Locale
 import java.util.concurrent.ExecutionException
@@ -346,38 +352,16 @@ class ScanImageActivity : AppCompatActivity() {
         cropBitmap = imageView.getCroppedImage()!!
 
         val image = FirebaseVisionImage.fromBitmap(cropBitmap)
-        /*  FirebaseVisionCloudDocumentRecognizerOptions options =
-                new FirebaseVisionCloudDocumentRecognizerOptions.Builder()
-                        .setLanguageHints(Arrays.asList("en", "bn", "hi"))
-                        .build();
-        FirebaseVisionDocumentTextRecognizer detector = FirebaseVision.getInstance()
-                .getCloudDocumentTextRecognizer(options);
-
-        detector.processImage(image)
-                .addOnSuccessListener(new OnSuccessListener<FirebaseVisionDocumentText>() {
-                    @Override
-                    public void onSuccess(FirebaseVisionDocumentText result) {
-                        result.getText().toString();
-                        Log.e("findText", result.getText().toString());
-                        Toast.makeText(MainActivity.this, result.getText().toString(), Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // Task failed with an exception
-                        Log.e("findText", e.toString());
-
-                        Toast.makeText(MainActivity.this, e.toString(), Toast.LENGTH_SHORT).show();
-                        // ...
-                    }
-                });*/
 
 
-        val detector = FirebaseVision.getInstance()
-            .onDeviceTextRecognizer
+        val options = FirebaseVisionCloudTextRecognizerOptions.Builder()
+            .setLanguageHints(listOf("en", "bn", "hi"))
+            .build()
+
+        val detector = FirebaseVision.getInstance().getCloudTextRecognizer(options)
+
         val result = detector.processImage(image)
-            .addOnSuccessListener { firebaseVisionText -> // Task completed successfully
+            .addOnSuccessListener { firebaseVisionText ->
                 startActivity(
                     Intent(applicationContext, ResultActivity::class.java).putExtra(
                         "result",
@@ -385,7 +369,7 @@ class ScanImageActivity : AppCompatActivity() {
                     )
                 )
             }
-            .addOnFailureListener {
+            .addOnFailureListener { e ->
                 // Task failed with an exception
                 // ...
             }
