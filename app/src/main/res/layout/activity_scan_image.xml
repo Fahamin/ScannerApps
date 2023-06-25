@@ -24,23 +24,13 @@
     <com.canhub.cropper.CropImageView
         android:id="@+id/imageID"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="500dp"
         android:layout_gravity="center"
         android:layout_margin="15dp"
         android:padding="5dp"
         android:src="@mipmap/ic_launcher_round"
         android:visibility="gone" />
 
-
-    <!-- <androidx.appcompat.widget.AppCompatImageView
-         android:id="@+id/imageID"
-         android:layout_width="match_parent"
-         android:layout_height="match_parent"
-         android:layout_margin="15dp"
-         android:padding="5dp"
-         android:rotation="90"
-         android:src="@mipmap/ic_launcher_round"
-         android:visibility="gone" />-->
 
     <RelativeLayout
         android:id="@+id/camera_LayoutID"
@@ -61,7 +51,7 @@
             android:layout_height="65dp"
             android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
-            android:background="@drawable/ic_baseline_camera_alt_24"
+            android:background="@drawable/ic_camera"
             android:scaleType="fitCenter" />
 
     </RelativeLayout>

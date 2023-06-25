@@ -84,6 +84,31 @@ class ScanImageActivity : AppCompatActivity() {
         "android.permission.WRITE_EXTERNAL_STORAGE"
     )
 
+    private val languageList = listOf<String>(
+
+        "af", "sq", "ar",
+        "hy", "be", "bn",
+        "bg", "ca", "zh",
+        "hr", "cs", "da",
+        "nl", "en", "et",
+        "fil", "fi", "fr",
+        "de", "el", "gu",
+        "iw", "hi", "hu",
+        "is", "id", "it",
+        "ja", "kn", "km",
+        "ko", "lo", "lv",
+        "lt", "mk", "ms",
+        "ml", "mr", "ne",
+        "no", "fa", "pl",
+        "pt", "pa", "ro",
+        "ru", "sr", "ru-PETR1708",
+        "sr-Latn", "sk", "sl",
+        "es", "sv", "tl",
+        "ta", "te", "th",
+        "tr", "uk", "vi",
+        "yi", "la", "ur",
+    )
+
     @SuppressLint("WrongViewCast", "MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -355,7 +380,7 @@ class ScanImageActivity : AppCompatActivity() {
 
 
         val options = FirebaseVisionCloudTextRecognizerOptions.Builder()
-            .setLanguageHints(listOf("en", "bn", "hi"))
+            .setLanguageHints(languageList)
             .build()
 
         val detector = FirebaseVision.getInstance().getCloudTextRecognizer(options)

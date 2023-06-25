@@ -32,7 +32,7 @@ class ResultActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_result)
-        title = "Document Save"
+        title = "Scanned Result"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         resultTv = findViewById(R.id.tvResult)
@@ -52,6 +52,7 @@ class ResultActivity : AppCompatActivity() {
             Toast.makeText(this, "Copy", Toast.LENGTH_SHORT).show()
 
         })
+
         findViewById<View>(R.id.saveID).setOnClickListener(View.OnClickListener {
             val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
             val date = Date()
@@ -97,19 +98,19 @@ class ResultActivity : AppCompatActivity() {
         return dir
     }
 
-   /* private fun getneratePdf() {
-        PdfGenerator.getBuilder().setContext(this).fromViewSource().fromView(resultTv)
-            .setFileName("Test-PDF").setFolderName("Test-PDF-folder").openPDFafterGeneration(true)
-            .build(object : PdfGeneratorListener() {
-                override fun onFailure(failureResponse: FailureResponse) {
-                    super.onFailure(failureResponse)
-                }
+    /* private fun getneratePdf() {
+         PdfGenerator.getBuilder().setContext(this).fromViewSource().fromView(resultTv)
+             .setFileName("Test-PDF").setFolderName("Test-PDF-folder").openPDFafterGeneration(true)
+             .build(object : PdfGeneratorListener() {
+                 override fun onFailure(failureResponse: FailureResponse) {
+                     super.onFailure(failureResponse)
+                 }
 
-                override fun showLog(log: String) {
-                    super.showLog(log)
-                }
+                 override fun showLog(log: String) {
+                     super.showLog(log)
+                 }
 
-                override fun onStartPDFGeneration() {*//*When PDF generation begins to start*//*
+                 override fun onStartPDFGeneration() {*//*When PDF generation begins to start*//*
                 }
 
                 override fun onFinishPDFGeneration() {*//*When PDF generation is finished*//*
