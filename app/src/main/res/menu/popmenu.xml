@@ -6,10 +6,13 @@
 
 
     <item
+        android:icon="@drawable/baseline_delete_outline_24"
         android:id="@+id/pop_deletID"
-        android:title="Delete List"/>
+        android:title="Delete File"/>
 
     <item
+        android:icon="@drawable/baseline_file_open_24"
         android:id="@+id/pop_openID"
-        android:title="Open List"/>
+        android:title="Open File"/>
+
 </menu>

@@ -47,7 +47,7 @@ class CustomAdapter(
         })
 
         holder.optionMenu.setOnClickListener(View.OnClickListener {
-            showPopup(holder.itemView, model, context, itemClickListener);
+            showPopup(holder.optionMenu, model, context, itemClickListener);
 
         })
     }

@@ -79,7 +79,7 @@
                             android:layout_width="46dp"
                             android:layout_height="46dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/camera" />
+                            android:src="@drawable/camera_take" />
                     </LinearLayout>
 
                     <TextView
@@ -119,7 +119,7 @@
                             android:layout_width="46dp"
                             android:layout_height="46dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/gallery" />
+                            android:src="@drawable/gallary" />
 
                     </LinearLayout>
 
@@ -140,17 +140,15 @@
 
             </LinearLayout>
 
-            <Button
+            <TextView
                 android:id="@+id/btnCancle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:background="@drawable/btn_background"
-                android:backgroundTint="#00B4D8"
                 android:elevation="5dp"
-                android:text="Cancel"
-
-                android:textColor="@color/white"
+                android:layout_gravity="right"
+                android:text="@string/Cancel"
+                android:textColor="@color/black"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 

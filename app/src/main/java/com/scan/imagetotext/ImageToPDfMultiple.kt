@@ -65,6 +65,14 @@ class ImageToPDfMultiple : AppCompatActivity() {
         // Initializing the ViewPager Object
         mViewPager = findViewById<View>(R.id.viewPagerMain) as ViewPager
 
+
+        if (methodRequiresTwoPermission()) {
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            imagePickerLuncher.launch(Intent.createChooser(intent, "Select Picture"))
+        }
+
+
         // click here to select image
         btn_ImageSelect.setOnClickListener(View.OnClickListener {
             if (methodRequiresTwoPermission()) {
@@ -134,7 +142,7 @@ class ImageToPDfMultiple : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Permissions not granted by the user.", Toast.LENGTH_SHORT)
                     .show()
-                finish()
+
             }
         })
 
@@ -263,7 +271,8 @@ class ImageToPDfMultiple : AppCompatActivity() {
             }
             runOnUiThread {
                 dialog.dismiss()
-                Toast.makeText(this, "Successful Pdf created", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Pdf Successful Check Download Folder", Toast.LENGTH_SHORT)
+                    .show()
                 finish()
             }
         }.start()

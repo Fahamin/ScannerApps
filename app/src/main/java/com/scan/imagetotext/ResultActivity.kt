@@ -1,6 +1,7 @@
 package com.scan.imagetotext
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Intent
@@ -42,6 +43,7 @@ class ResultActivity : AppCompatActivity() {
         resultTv.setText(result)
 
         findViewById<View>(R.id.editID).setOnClickListener(View.OnClickListener {
+            resultTv.requestFocus()
             resultTv.setSelection(0)
 
         })
@@ -54,15 +56,44 @@ class ResultActivity : AppCompatActivity() {
         })
 
         findViewById<View>(R.id.saveID).setOnClickListener(View.OnClickListener {
-            val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+
+            var resultDialog = Dialog(this)
+            resultDialog.setContentView(R.layout.dialog_result_save)
+
+            var et_SaveFileName = resultDialog.findViewById<EditText>(R.id.et_SaveFileName)
+            var btn_EdiFileName = resultDialog.findViewById<View>(R.id.btn_EdiFileName)
+            var btnBrowse = resultDialog.findViewById<View>(R.id.btnBrowse)
+            var btnSave = resultDialog.findViewById<View>(R.id.btnSave)
+
+            val dateFormat = SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
             val date = Date()
-            val timeStamp = dateFormat.format(date).toString()
+            val timeStamp = "IMG_" + dateFormat.format(date).toString()
 
-            val data = resultTv.text.toString()
-            val model = ScanResultModel(0, data, timeStamp)
-            db.insertToScanResult(model)
+            et_SaveFileName.setText(timeStamp)
+            btn_EdiFileName.setOnClickListener {
+                et_SaveFileName.requestFocus()
+                et_SaveFileName.setSelection(et_SaveFileName.text.length)
 
-            startActivity(Intent(this, FileSaveActivity::class.java));
+            }
+
+            btnBrowse.setOnClickListener {
+                val data = resultTv.text.toString()
+                val model = ScanResultModel(0, data, timeStamp)
+                db.insertToScanResult(model)
+                startActivity(Intent(this, FileSaveActivity::class.java));
+                resultDialog.dismiss()
+
+            }
+
+            btnSave.setOnClickListener {
+                val data = resultTv.text.toString()
+                val model = ScanResultModel(0, data, et_SaveFileName.text.toString())
+                db.insertToScanResult(model)
+                startActivity(Intent(this, FileSaveActivity::class.java));
+                resultDialog.dismiss()
+            }
+
+            resultDialog.show()
         })
 
         findViewById<View>(R.id.shareID).setOnClickListener(View.OnClickListener {

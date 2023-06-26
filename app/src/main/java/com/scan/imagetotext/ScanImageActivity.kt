@@ -140,7 +140,7 @@ class ScanImageActivity : AppCompatActivity() {
         dialog.setCancelable(false)
         dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.setCanceledOnTouchOutside(false)
-        val btnCancel = dialog.findViewById<Button>(R.id.btnCancle)
+        val btnCancel = dialog.findViewById<View>(R.id.btnCancle)
         val cameraIv: LinearLayout = dialog.findViewById(R.id.ivCamera)
         val galleryIv: LinearLayout = dialog.findViewById(R.id.ivGallary)
 
@@ -233,7 +233,9 @@ class ScanImageActivity : AppCompatActivity() {
         if (result.resultCode == RESULT_OK) {
             // There are no request codes
             val data = result.data
-            val selectedImage = data!!.data
+            uri = data?.data!!
+
+            val selectedImage = data.data
             val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
             if (selectedImage != null) {
                 val cursor =
@@ -243,10 +245,11 @@ class ScanImageActivity : AppCompatActivity() {
                     val columnIndex = cursor.getColumnIndex(filePathColumn[0])
                     val picturePath = cursor.getString(columnIndex)
                     myBitmap = BitmapFactory.decodeFile(picturePath)
-                    imageView.setImageBitmap(myBitmap)
+                  //  imageView.setImageBitmap(myBitmap)
                     imageView.visibility = View.VISIBLE
                     btnScan.visibility = View.VISIBLE
 
+                    imageView.setImageUriAsync(uri)
 
                     // imageurl = picturePath
 
